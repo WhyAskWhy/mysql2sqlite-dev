@@ -1,0 +1,26 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Purpose: Whitelist or blacklist recipients
+
+############################################################################
+# Search the specified access(5) database for the resolved RCPT TO address,
+# domain, parent domains, or localpart@, and execute the corresponding action.
+############################################################################
+
+# Note: This file should be accessible by only root and postfix users
+#
+#   chown root:postfix /etc/postfix/*/*.cf
+#   chmod u=rw,g=r,o= /etc/postfix/*/*.cf
+
+user = mysql2sqlite
+password = qwerty
+
+hosts = 127.0.0.1:3306
+dbname = mailserver
+
+query =
+    SELECT action
+    FROM access_check_recipients
+    WHERE recipient = '%s'
+    AND enabled = '1';

@@ -1,0 +1,13 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Note: This file should be accessible by only root and postfix users
+#
+#   chown root:postfix /etc/postfix/*/*.cf
+#   chmod u=rw,g=r,o= /etc/postfix/*/*.cf
+
+dbpath = /var/cache/mysql2sqlite/mailserver.db
+query =
+    SELECT action FROM mail_relay_whitelist
+    WHERE client ='%s'
+    AND enabled = '1';

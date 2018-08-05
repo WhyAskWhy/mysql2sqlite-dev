@@ -1,0 +1,38 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+
+# Note: Not strictly needed to validate SQLite database, mainly included
+# because I personally use this in a system I maintain.
+#
+# Because it's not tied directly to the mission of this project,
+# this file and any logic surrounding it is likely to be removed
+# during future cleanup work.
+
+# Note: This file should be accessible by only root and postfix users
+#
+#   chown root:postfix /etc/postfix/*/*.cf
+#   chmod u=rw,g=r,o= /etc/postfix/*/*.cf
+
+###########################################################################
+# PURPOSE
+###########################################################################
+
+# Override the default behavior of a catch-all alias overriding or "shadowing"
+# virtual mailbox entries. This behavior is due to the virtual_mailbox_maps
+# table being consulted AFTER the virtual_alias_maps table where the catch-all
+# matches any address which doesn't correspond with an explicit entry in the
+# virtual_alias_maps table.
+
+
+
+dbpath = /var/cache/mysql2sqlite/mailserver.db
+
+query =
+
+    # Uncomment to treat a disabled user as a non-existant alias
+    #SELECT email FROM virtual_users WHERE email = '%s'AND enabled = '1'
+
+    # Treat enabled OR disabled virtual users as valid email recipients
+    # in order to keep them from being shadowed by virtual aliases
+    SELECT email FROM virtual_users WHERE email = '%s'
