@@ -1,0 +1,19 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Note: This file should be accessible by only root and postfix users
+#
+#   chown root:postfix /etc/postfix/*/*.cf
+#   chmod u=rw,g=r,o= /etc/postfix/*/*.cf
+
+user = mysql2sqlite
+password = qwerty
+
+hosts = 127.0.0.1:3306
+dbname = mailserver
+
+query =
+    SELECT bcc_recipient
+    FROM recipient_bcc_maps
+    WHERE original_recipient ='%s'
+    AND enabled = 1;

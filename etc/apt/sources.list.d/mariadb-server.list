@@ -1,0 +1,17 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Purpose:
+#
+#   Use upstream MariaDB packages in order to target specific versions
+#   of MariaDB used in prod enviornments where this script is used.
+#
+# https://mariadb.com/kb/en/mariadb/installing-mariadb-deb-files/
+#
+# You need to install the GPG package signing key before attempting to
+# update the package lists:
+#
+# sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+
+deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu xenial main
+deb-src http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu xenial main

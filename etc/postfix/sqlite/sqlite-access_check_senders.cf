@@ -1,0 +1,34 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Purpose: Whitelist or blacklist senders based on the MAIL FROM address
+
+##############################################################################
+# Search the specified access(5) database for the MAIL FROM address, domain,
+# parent domains, or localpart@, and execute the corresponding action.
+##############################################################################
+
+# MAIL FROM address is the:
+#
+# *  envelope sender address
+#
+# *  where bounces will be sent
+#
+# *  the value for Return-Path field once it arrives at the destination. In
+#    other words, it is not part of the message header during SMTP
+#    transport, but it is added by the MDA (mail delivery agent) during
+#    delivery.
+#
+# *  the address that will receive bounces to messages from the MTA, if
+#    the To: address doesn't exist.
+
+# Note: This file should be accessible by only root and postfix users
+#
+#   chown root:postfix /etc/postfix/*/*.cf
+#   chmod u=rw,g=r,o= /etc/postfix/*/*.cf
+
+dbpath = /var/cache/mysql2sqlite/mailserver.db
+query =
+
+    SELECT action FROM access_check_senders WHERE sender = '%s' AND enabled = '1';
+

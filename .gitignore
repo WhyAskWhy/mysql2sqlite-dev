@@ -1,0 +1,6 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Real data that I don't want to accidentally commit
+sample_data
+

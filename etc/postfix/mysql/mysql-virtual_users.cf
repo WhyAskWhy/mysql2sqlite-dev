@@ -1,0 +1,23 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+
+# Note: This file should be accessible by only root and postfix users
+#
+#   chown root:postfix /etc/postfix/*/*.cf
+#   chmod u=rw,g=r,o= /etc/postfix/*/*.cf
+
+user = mysql2sqlite
+password = qwerty
+
+# Using the IP vs 'localhost' allows a chroot'd Postfix to access MySQL
+hosts = 127.0.0.1:3306
+dbname = mailserver
+query =
+
+    # Uncomment to treat a disabled user as a non-existant one
+    #SELECT 1 FROM virtual_users WHERE email = '%s' AND enabled = '1'
+
+    # Treat enabled OR disabled virtual users as valid email recipients
+    # in order to keep them from being shadowed by virtual aliases
+    SELECT 1 FROM virtual_users WHERE email = '%s'

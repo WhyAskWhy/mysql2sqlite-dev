@@ -1,0 +1,18 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Note: This file should be accessible by only root and postfix users
+#
+#   chown root:postfix /etc/postfix/*/*.cf
+#   chmod u=rw,g=r,o= /etc/postfix/*/*.cf
+
+user = mysql2sqlite
+password = qwerty
+
+# Using the IP vs 'localhost' allows a chroot'd Postfix to access MySQL
+hosts = 127.0.0.1:3306
+dbname = mailserver
+query =
+    SELECT destination FROM virtual_aliases
+    WHERE source ='%s'
+    AND enabled = '1';

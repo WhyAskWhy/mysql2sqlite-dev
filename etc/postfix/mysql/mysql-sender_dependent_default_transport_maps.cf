@@ -1,0 +1,40 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Purpose: Select default mail transport based on sender address.
+
+##############################################################################
+# Search the specified access(5) database for the MAIL FROM address, domain,
+# parent domains, or localpart@, and select the appropriate mail transport
+##############################################################################
+
+# MAIL FROM address is the:
+#
+# *  envelope sender address
+#
+# *  where bounces will be sent
+#
+# *  the value for Return-Path field once it arrives at the destination. In
+#    other words, it is not part of the message header during SMTP
+#    transport, but it is added by the MDA (mail delivery agent) during
+#    delivery.
+#
+# *  the address that will receive bounces to messages from the MTA, if
+#    the To: address doesn't exist.
+
+# Note: This file should be accessible by only root and postfix users
+#
+#   chown root:postfix /etc/postfix/*/*.cf
+#   chmod u=rw,g=r,o= /etc/postfix/*/*.cf
+
+user = mysql2sqlite
+password = qwerty
+
+hosts = 127.0.0.1:3306
+dbname = mailserver
+
+query =
+    SELECT transport
+    FROM sender_dependent_default_transport_maps
+    WHERE sender = '%s'
+    AND enabled = '1';

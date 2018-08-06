@@ -1,0 +1,13 @@
+# https://github.com/WhyAskWhy/mysql2sqlite
+# https://github.com/WhyAskWhy/mysql2sqlite-dev
+
+# Aliases for local testing purposes
+
+postmaster: root
+
+# Default user account created within the Ubuntu 16.04 VM. Update this to
+# reflect whatever your test user account is.
+root: ubuntu
+
+# TODO: Fill in any needed aliases for testing
+
