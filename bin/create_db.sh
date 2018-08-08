@@ -22,18 +22,6 @@ THIS_DEV_ENV_GIT_REPO_BRANCH="master"
 general_config_file="mysql2sqlite_general.ini"
 query_config_file="mysql2sqlite_queries.ini"
 
-# Attempt to emulate approach that would be used to pass in a dir path
-# to the main script.
-cmdline_dir_value=$1
-
-config_file_dirs=(
-    "${cmdline_dir_value}"
-    "/etc/mysql2sqlite"
-    "~/.config/mysql2sqlite"
-    "/tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}"
-)
-
-
 # Get updated repo contents
 if [[ ! -d /tmp/${MAIN_PROJECT_GIT_REPO_BASENAME} ]]; then
     cd /tmp
@@ -58,16 +46,39 @@ fi
 sudo mkdir -vp /var/cache/mysql2sqlite
 sudo chown -vR ${USER}: /var/cache/mysql2sqlite
 
+# Array of directory paths to check for existing config files. If not found,
+# this script will deploy the provided templates. Entries are added to the
+# array based on the same precedence set by the main script.
+declare -a CONFIG_FILE_DIRS
+
+# Attempt to source the same environment variable that the main script will
+# attempt to use for evaluating config files
+if [[ ! -z "${MYSQL2SQLITE_CONFIG_DIR+x}" ]]; then
+    echo "Environment variable for specifying config files dir found: ${MYSQL2SQLITE_CONFIG_DIR}"
+    CONFIG_FILE_DIRS+=("${MYSQL2SQLITE_CONFIG_DIR}")
+fi
+
+# Attempt to emulate approach that would be used to pass in a dir path
+# to the main script.
+if [[ ! -z "${1+x}" ]]; then
+    echo "Command line config files dir path specified: ${1}"
+    CONFIG_FILE_DIRS+=("${1}")
+fi
+
+CONFIG_FILE_DIRS+=("/tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}")
+CONFIG_FILE_DIRS+=("$HOME/.config/mysql2sqlite")
+CONFIG_FILE_DIRS+=("/etc/mysql2sqlite")
+
 config_files_found="false"
 config_files_path=""
 # Deploy template config files locally if not already present elsewhere
-for config_file_dir in "${config_file_dirs[@]}"
+for CONFIG_FILE_DIR in "${CONFIG_FILE_DIRS[@]}"
 do
-    echo "Checking $config_file_dir for config files ..."
-    if [[ -f "${config_file_dir}/${general_config_file}" ]] && \
-       [[ -f "${config_file_dir}/${query_config_file}" ]]; then
+    echo "Checking $CONFIG_FILE_DIR for config files ..."
+    if [[ -f "${CONFIG_FILE_DIR}/${general_config_file}" ]] && \
+       [[ -f "${CONFIG_FILE_DIR}/${query_config_file}" ]]; then
         config_files_found="true"
-        config_files_path="${config_file_dir}"
+        config_files_path="${CONFIG_FILE_DIR}"
         break
     fi
 done
