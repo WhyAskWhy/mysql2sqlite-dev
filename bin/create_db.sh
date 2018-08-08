@@ -19,6 +19,20 @@ THIS_DEV_ENV_GIT_REPO_URL="http://local-mirror:3000/mirror/mysql2sqlite-dev"
 THIS_DEV_ENV_GIT_REPO_BASENAME="$(basename ${THIS_DEV_ENV_GIT_REPO_URL})"
 THIS_DEV_ENV_GIT_REPO_BRANCH="master"
 
+general_config_file="mysql2sqlite_general.ini"
+query_config_file="mysql2sqlite_queries.ini"
+
+# Attempt to emulate approach that would be used to pass in a dir path
+# to the main script.
+cmdline_dir_value=$1
+
+config_file_dirs=(
+    "${cmdline_dir_value}"
+    "/etc/mysql2sqlite"
+    "~/.config/mysql2sqlite"
+    "/tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}"
+)
+
 
 # Get updated repo contents
 if [[ ! -d /tmp/${MAIN_PROJECT_GIT_REPO_BASENAME} ]]; then
@@ -44,11 +58,39 @@ fi
 sudo mkdir -vp /var/cache/mysql2sqlite
 sudo chown -vR ${USER}: /var/cache/mysql2sqlite
 
+config_files_found="false"
+config_files_path=""
+# Deploy template config files locally if not already present elsewhere
+for config_file_dir in "${config_file_dirs[@]}"
+do
+    echo "Checking $config_file_dir for config files ..."
+    if [[ -f "${config_file_dir}/${general_config_file}" ]] && \
+       [[ -f "${config_file_dir}/${query_config_file}" ]]; then
+        config_files_found="true"
+        config_files_path="${config_file_dir}"
+        break
+    fi
+done
+
+if [[ "${config_files_found}" == "false" ]]; then
+    echo "Exiting config files not found. Deploying template config files ..."
+    cp -v \
+        /tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}/mysql2sqlite_general.ini.tmpl \
+        /tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}/mysql2sqlite_general.ini
+
+    cp -v \
+        /tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}/mysql2sqlite_queries.ini.tmpl \
+        /tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}/mysql2sqlite_queries.ini
+else
+    echo "Configuration files found in ${config_files_path}. Using those files."
+fi
+
 
 # TODO: What command-line options are needed?
 #   - path to main config file?
 #   - path to output db file?
-python3 /tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}/mysql2sqlite.py
+python3 /tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}/mysql2sqlite.py \
+    --config_file_dir "${cmdline_dir_value}"
 
 if [[ $? -eq 0 ]]; then
     echo "Successfully generated SQLite db file."
