@@ -56,13 +56,17 @@ declare -a CONFIG_FILE_DIRS
 if [[ ! -z "${MYSQL2SQLITE_CONFIG_DIR+x}" ]]; then
     echo "Environment variable for specifying config files dir found: ${MYSQL2SQLITE_CONFIG_DIR}"
     CONFIG_FILE_DIRS+=("${MYSQL2SQLITE_CONFIG_DIR}")
+else
+    echo "SKIPPED: Environment variable for specifying config files dir not found"
 fi
 
 # Attempt to emulate approach that would be used to pass in a dir path
 # to the main script.
 if [[ ! -z "${1+x}" ]]; then
-    echo "Command line config files dir path specified: ${1}"
+    echo "Command-line config files dir path specified: ${1}"
     CONFIG_FILE_DIRS+=("${1}")
+else
+    echo "SKIPPED: Command-line config files dir path not provided"
 fi
 
 CONFIG_FILE_DIRS+=("/tmp/${MAIN_PROJECT_GIT_REPO_BASENAME}")
