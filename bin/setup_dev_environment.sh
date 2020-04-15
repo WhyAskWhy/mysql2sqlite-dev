@@ -35,14 +35,14 @@ if [[ "$UID" -eq 0 ]]; then
 fi
 
 #MAIN_PROJECT_GIT_REPO_URL="https://github.com/deoren/mysql2sqlite"
-#MAIN_PROJECT_GIT_REPO_URL="https://github.com/WhyAskWhy/mysql2sqlite"
-MAIN_PROJECT_GIT_REPO_URL="http://local-mirror:3000/mirror/mysql2sqlite"
+MAIN_PROJECT_GIT_REPO_URL="https://github.com/WhyAskWhy/mysql2sqlite"
+#MAIN_PROJECT_GIT_REPO_URL="http://local-mirror:3000/mirror/mysql2sqlite"
 MAIN_PROJECT_GIT_REPO_BASENAME="$(basename ${MAIN_PROJECT_GIT_REPO_URL})"
 MAIN_PROJECT_GIT_REPO_BRANCH="master"
 
 # THIS_DEV_ENV_GIT_REPO_URL="https://github.com/deoren/mysql2sqlite-dev"
-# THIS_DEV_ENV_GIT_REPO_URL="https://github.com/WhyAskWhy/mysql2sqlite-dev"
-THIS_DEV_ENV_GIT_REPO_URL="http://local-mirror:3000/mirror/mysql2sqlite-dev"
+THIS_DEV_ENV_GIT_REPO_URL="https://github.com/WhyAskWhy/mysql2sqlite-dev"
+# THIS_DEV_ENV_GIT_REPO_URL="http://local-mirror:3000/mirror/mysql2sqlite-dev"
 THIS_DEV_ENV_GIT_REPO_BASENAME="$(basename ${THIS_DEV_ENV_GIT_REPO_URL})"
 THIS_DEV_ENV_GIT_REPO_BRANCH="master"
 
